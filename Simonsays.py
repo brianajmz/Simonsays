@@ -2,6 +2,7 @@ import RPi.GPIO as GPIO
 import LEDRGB as LED  
 import time
 import random
+from getpass import getpass
 colors = ['R', 'G', 'B', 'Y']
 # breadboard setup 
 GPIO.setmode(GPIO.BOARD)
@@ -20,6 +21,13 @@ GPIO.setup(buzz_pin,GPIO.OUT)
 Buzz = GPIO.PWM(buzz_pin,1000)
 color_sequence = []
 frequency_sequence = []
+
+def validate_guess(color_sequence_string,guess):
+    if color_sequence_string == guess:
+        print "Correct"
+    else : #if the user doesn't guess correctly, then print 'You Lose'
+        print "You Lose :("
+        exit()
 # this script appends a value to a list 
 def append_list():
     while True:
@@ -34,10 +42,14 @@ def append_list():
             Buzz.stop()
             LED.noColor()
             time.sleep(0.5)
-            
+        guess = getpass("Guess the color sequence")  
+        color_sequence_string=''.join(color_sequence)
+        validate_guess(color_sequence_string,guess.upper())
+    
 
 if __name__ == '__main__':
     try:
+        print "Type in the color sequence, R = red, G = green, B = blue, Y= yellow"
         append_list()
         LED.destroy()
     except KeyboardInterrupt:
